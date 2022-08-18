@@ -51,6 +51,7 @@ public class UserServiceTest {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail("Во время тестирования сохранения пользователя произошло исключение\n" + e);
         }
     }
@@ -79,6 +80,7 @@ public class UserServiceTest {
                 Assert.fail("Проверьте корректность работы метода сохранения пользователя/удаления или создания таблицы");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail("При попытке достать всех пользователей из базы данных произошло исключение\n" + e);
         }
     }
@@ -95,6 +97,7 @@ public class UserServiceTest {
                 Assert.fail("Метод очищения таблицы пользователей реализован не корректно");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail("При тестировании очистки таблицы пользователей произошло исключение\n" + e);
         }
     }
