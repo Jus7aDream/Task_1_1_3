@@ -37,7 +37,6 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Table deleted!");
         } catch (SQLException e) {
             System.err.println("Table not found");
-//            e.printStackTrace();
         }
 
     }
