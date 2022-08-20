@@ -14,14 +14,14 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        String sql = "CREATE TABLE `users_schema`.`new_table` (\n" +
+        try (PreparedStatement statement = util.getConnection().prepareStatement(
+                "CREATE TABLE `users_schema`.`new_table` (\n" +
                 "  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` VARCHAR(255) NOT NULL,\n" +
                 "  `lastName` VARCHAR(255) NOT NULL,\n" +
                 "  `age` TINYINT(3) NULL,\n" +
                 "  PRIMARY KEY (`id`),\n" +
-                "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql)) {
+                "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);")) {
             statement.execute();
             System.out.println("new_table created");
         } catch (SQLException e) {
@@ -30,9 +30,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String sql =
-                "DROP TABLE new_table;";
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = util.getConnection().prepareStatement("DROP TABLE new_table;")) {
             statement.execute();
             System.out.println("Table deleted!");
         } catch (SQLException e) {
@@ -42,9 +40,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        String sql = "INSERT INTO new_table (name, lastName, age) " +
-                "values (" + "'" + name + "'" + ", " + "'" + lastName + "'" + ", " + age + ");";
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = util.getConnection().prepareStatement(
+                "INSERT INTO new_table (name, lastName, age) " +
+                "values (" + "'" + name + "'" + ", " + "'" + lastName + "'" + ", " + age + ");")) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,8 +50,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        String sql = "DELETE FROM new_table WHERE id=" + id + ";";
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = util.getConnection().prepareStatement(
+                "DELETE FROM new_table WHERE id=" + id + ";")) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -61,9 +59,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM new_table";
         List<User> list = new ArrayList<>();
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql);
+        try (PreparedStatement statement = util.getConnection().prepareStatement("SELECT * FROM new_table");
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 String sName = resultSet.getString("name");
@@ -72,7 +69,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 User user = new User(sName, sLastName, age);
                 list.add(user);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -80,8 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String sql = "DELETE FROM new_table;";
-        try (PreparedStatement statement = util.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = util.getConnection().prepareStatement("DELETE FROM new_table;")) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
