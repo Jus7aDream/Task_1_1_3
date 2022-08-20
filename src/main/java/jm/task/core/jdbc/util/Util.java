@@ -14,14 +14,10 @@ public final class Util {
     public Connection getConnection() {
 
         try {
-            //Подключаем Драйвер
             Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-//            if(!connection.isClosed()) {
-//                System.out.println("Connected");
-//            }
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
             System.out.println("Connection_ERROR");
         }
         return connection;
